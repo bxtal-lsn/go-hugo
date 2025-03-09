@@ -1,0 +1,18 @@
+baseURL = "http://localhost"
+languageCode = "en-us"
+theme = "hugo-book"
+
+[module]
+  [[module.imports]]
+  path = "github.com/alex-shpak/hugo-book"
+
+[markup.goldmark.renderer]
+  unsafe = true  # Allows HTML in markdown
+
+[params]
+  BookTheme = "auto"
+  BookMenuBundle = '/menu'
+  BookSection = 'docs'
+  BookLogo = "sev.svg"
+  BookFavicon = "sev.svg"
+  BookToC = true

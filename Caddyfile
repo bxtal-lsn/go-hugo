@@ -1,0 +1,6 @@
+{$SERVER_IP} {
+    root * /usr/share/caddy
+    file_server
+    encode gzip
+    tls internal
+}
