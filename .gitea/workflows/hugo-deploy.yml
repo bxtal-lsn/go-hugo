@@ -27,7 +27,7 @@ jobs:
           cd repo
           
           # Clone the repository
-          git clone https://gitea.example.com/yourusername/go-hugo.git .
+          git clone https://10.249.84.50:3000/Sev/documentation.git .
           # If authentication is required:
           # git clone https://${GITEA_USERNAME}:${GITEA_PASSWORD}@gitea.example.com/yourusername/go-hugo.git .
           
