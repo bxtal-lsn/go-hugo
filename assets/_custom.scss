@@ -50,6 +50,7 @@ a:hover {
   background-color: #282C34 !important;
   border-radius: 6px !important; 
   margin-bottom: 0rem !important;
+  padding-top: 1.5rem !important; /* Add top padding to prevent overlap */
   overflow: hidden;
   overflow-x: auto !important; 
   white-space: pre !important;
