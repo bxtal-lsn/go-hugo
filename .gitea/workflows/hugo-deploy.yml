@@ -7,34 +7,63 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: local
+    runs-on: self-hosted
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-        
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v2
-        with:
-          hugo-version: 'latest'
-          extended: true
+      - name: Install Node.js
+        run: |
+          echo "Installing Node.js..."
+          apt-get update && apt-get install -y nodejs npm || true
+          # Alternative using apk if it's an Alpine-based container
+          apk add --no-cache nodejs npm || true
+          # Check if installation worked
+          node --version || echo "Node.js installation failed"
           
+      - name: Manual Checkout
+        run: |
+          echo "Performing manual checkout..."
+          # Clean up any previous checkout
+          rm -rf repo
+          mkdir -p repo
+          cd repo
+          
+          # Clone the repository
+          git clone https://gitea.example.com/yourusername/go-hugo.git .
+          # If authentication is required:
+          # git clone https://${GITEA_USERNAME}:${GITEA_PASSWORD}@gitea.example.com/yourusername/go-hugo.git .
+          
+          # Use the correct branch
+          git checkout main
+      
       - name: Setup theme
         run: |
-          git clone https://github.com/alex-shpak/hugo-book.git themes/hugo-book
+          cd repo
+          mkdir -p themes
+          if [ ! -d "themes/hugo-book" ]; then
+            git clone https://github.com/alex-shpak/hugo-book.git themes/hugo-book
+          fi
       
       - name: Build site
-        run: hugo --minify
-        
-      - name: Deploy to web directory
         run: |
-          # Create the target directory if it doesn't exist (using sudo if needed)
-          sudo mkdir -p /var/www/hugo-site
+          cd repo
+          # Ensure Hugo is installed
+          if ! command -v hugo &> /dev/null; then
+            echo "Hugo not found, attempting to install..."
+            apt-get update && apt-get install -y hugo || true
+            apk add --no-cache hugo || true
+          fi
+          hugo --minify
+      
+      - name: Deploy to mounted directory
+        run: |
+          cd repo
+          # Clean the destination directory
+          rm -rf /var/www/hugo-site/*
           
-          # Copy the built files to the web directory
-          sudo cp -r public/* /var/www/hugo-site/
+          # Copy the built files
+          cp -r public/* /var/www/hugo-site/
           
-          # Set appropriate permissions and ownership
-          sudo chmod -R 755 /var/www/hugo-site
-          sudo chown -R www-data:www-data /var/www/hugo-site || true
+          # Set permissions
+          chmod -R 755 /var/www/hugo-site
           
-          echo "Site deployed to /var/www/hugo-site"
+          echo "Site deployed successfully to /var/www/hugo-site"
+          ls -la /var/www/hugo-site
