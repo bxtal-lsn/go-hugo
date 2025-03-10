@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: self-hosted
+    runs-on: oracle_runner2
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
