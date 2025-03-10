@@ -1,4 +1,4 @@
-## Installation kukkur
+## Installation
 See installation operions on [ansible installation](https://docs.ansible.com/ansible/latest/installation_guide/index.html)
 
 For Arch Linux run `sudo pacman -S ansible`
