@@ -14,15 +14,6 @@ jobs:
         with:
           submodules: recursive  # Important for the hugo-book theme
 
-      - name: Setup Hugo
-        run: |
-          # Check if Hugo is installed, if not, install it
-          if ! command -v hugo &> /dev/null; then
-            echo "Installing Hugo..."
-            # For Oracle Linux
-            sudo snap install -y hugo
-          fi
-
       - name: Build site
         run: |
           echo "Building Hugo site..."
