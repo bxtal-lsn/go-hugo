@@ -7,7 +7,7 @@ on:
 
 jobs:
   test-filesystem:
-    runs-on: self-hosted
+    runs-on: local
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
