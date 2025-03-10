@@ -20,7 +20,7 @@ jobs:
           if ! command -v hugo &> /dev/null; then
             echo "Installing Hugo..."
             # For Oracle Linux
-            sudo dnf install -y hugo
+            sudo snap install -y hugo
           fi
 
       - name: Build site
