@@ -1,28 +1,14 @@
-version: '3'
-
 services:
-  # Use a newer Hugo extended version with proper permissions
-  hugo:
-    image: klakegg/hugo:ext-alpine-ci
-    container_name: devwiki-hugo
-    command: server --buildDrafts --buildFuture --bind 0.0.0.0
-    volumes:
-      - .:/src
-    networks:
-      - wiki-network
-    ports:
-      - "1313:1313"
-
   # Caddy with simplified config
   caddy:
     image: caddy:2-alpine
     container_name: devwiki-caddy
     restart: unless-stopped
     ports:
-      - "80:80"
-      - "443:443"
+      - "8000:80"
+      - "4443:443"
     environment:
-      - SERVER_IP=${SERVER_IP:-localhost}
+      - SERVER_IP=${SERVER_IP:-10.111.200.177}
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data
