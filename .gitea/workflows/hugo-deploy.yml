@@ -1,4 +1,4 @@
-name: Test Filesystem Access
+name: Build and Deploy Hugo Site
 
 on:
   push:
@@ -6,43 +6,31 @@ on:
       - main
 
 jobs:
-  test-filesystem:
+  build-deploy:
     runs-on: local
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
       
-      - name: Check environment
+      - name: Install Hugo
         run: |
-          echo "Runner working directory: $(pwd)"
-          echo "Home directory: $HOME"
-          echo "User: $(whoami)"
-          echo "Groups: $(groups)"
-          echo "Root directory contents:"
-          ls -la /
-          
-      - name: Test file creation in various locations
-        run: |
-          echo "Testing file creation in current directory..."
-          echo "test content" > test-file-current-dir.txt
-          ls -la test-file-current-dir.txt
-          
-          echo "Testing file creation in /tmp..."
-          echo "test content" > /tmp/test-file-tmp.txt
-          ls -la /tmp/test-file-tmp.txt
-          
-          echo "Testing file creation in home directory..."
-          echo "test content" > $HOME/test-file-home.txt
-          ls -la $HOME/test-file-home.txt
-          
-      - name: Test file creation with sudo
-        run: |
-          echo "Testing file creation in /var/www with sudo..."
-          if sudo mkdir -p /var/www/test-dir; then
-            echo "Successfully created /var/www/test-dir"
-            sudo touch /var/www/test-dir/test-file.txt
-            echo "Created test file. Directory contents:"
-            ls -la /var/www/test-dir/
-          else
-            echo "Failed to create directory in /var/www"
+          # Skip if Hugo is already installed
+          if ! command -v hugo &> /dev/null; then
+            echo "Installing Hugo..."
+            apt-get update && apt-get install -y hugo || apk add --no-cache hugo
           fi
+      
+      - name: Setup theme
+        run: |
+          git clone https://github.com/alex-shpak/hugo-book.git themes/hugo-book
+      
+      - name: Build and deploy
+        run: |
+          # Build the site
+          hugo --minify
+          
+          # Copy to web directory
+          rm -rf /var/www/hugo-site/*
+          cp -r public/* /var/www/hugo-site/
+          
+          echo "Deployed to /var/www/hugo-site"
