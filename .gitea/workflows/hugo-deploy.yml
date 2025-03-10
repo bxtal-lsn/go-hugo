@@ -1,4 +1,4 @@
-name: Build and Deploy Hugo Site
+name: Test Filesystem Access
 
 on:
   push:
@@ -6,64 +6,43 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
-    runs-on: local
+  test-filesystem:
+    runs-on: self-hosted
     steps:
-      - name: Install Node.js
-        run: |
-          echo "Installing Node.js..."
-          apt-get update && apt-get install -y nodejs npm || true
-          # Alternative using apk if it's an Alpine-based container
-          apk add --no-cache nodejs npm || true
-          # Check if installation worked
-          node --version || echo "Node.js installation failed"
-          
-      - name: Manual Checkout
-        run: |
-          echo "Performing manual checkout..."
-          # Clean up any previous checkout
-          rm -rf repo
-          mkdir -p repo
-          cd repo
-          
-          # Clone the repository
-          git clone http://10.249.84.50:3000/Sev/documentation.git .
-          # If authentication is required:
-          # git clone https://${GITEA_USERNAME}:${GITEA_PASSWORD}@gitea.example.com/yourusername/go-hugo.git .
-          
-          # Use the correct branch
-          git checkout main
+      - name: Checkout code
+        uses: actions/checkout@v3
       
-      - name: Setup theme
+      - name: Check environment
         run: |
-          cd repo
-          mkdir -p themes
-          if [ ! -d "themes/hugo-book" ]; then
-            git clone https://github.com/alex-shpak/hugo-book.git themes/hugo-book
+          echo "Runner working directory: $(pwd)"
+          echo "Home directory: $HOME"
+          echo "User: $(whoami)"
+          echo "Groups: $(groups)"
+          echo "Root directory contents:"
+          ls -la /
+          
+      - name: Test file creation in various locations
+        run: |
+          echo "Testing file creation in current directory..."
+          echo "test content" > test-file-current-dir.txt
+          ls -la test-file-current-dir.txt
+          
+          echo "Testing file creation in /tmp..."
+          echo "test content" > /tmp/test-file-tmp.txt
+          ls -la /tmp/test-file-tmp.txt
+          
+          echo "Testing file creation in home directory..."
+          echo "test content" > $HOME/test-file-home.txt
+          ls -la $HOME/test-file-home.txt
+          
+      - name: Test file creation with sudo
+        run: |
+          echo "Testing file creation in /var/www with sudo..."
+          if sudo mkdir -p /var/www/test-dir; then
+            echo "Successfully created /var/www/test-dir"
+            sudo touch /var/www/test-dir/test-file.txt
+            echo "Created test file. Directory contents:"
+            ls -la /var/www/test-dir/
+          else
+            echo "Failed to create directory in /var/www"
           fi
-      
-      - name: Build site
-        run: |
-          cd repo
-          # Ensure Hugo is installed
-          if ! command -v hugo &> /dev/null; then
-            echo "Hugo not found, attempting to install..."
-            apt-get update && apt-get install -y hugo || true
-            apk add --no-cache hugo || true
-          fi
-          hugo --minify
-      
-      - name: Deploy to mounted directory
-        run: |
-          cd repo
-          # Clean the destination directory
-          rm -rf /var/www/hugo-site/*
-          
-          # Copy the built files
-          cp -r public/* /var/www/hugo-site/
-          
-          # Set permissions
-          chmod -R 755 /var/www/hugo-site
-          
-          echo "Site deployed successfully to /var/www/hugo-site"
-          ls -la /var/www/hugo-site
