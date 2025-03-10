@@ -11,19 +11,27 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
         with:
-          submodules: recursive  # Important for the hugo-book theme
-
-      - name: Deploy to web server directory
+          hugo-version: 'latest'
+          extended: true
+          
+      - name: Setup theme
         run: |
-          # Create directory if it doesn't exist
-          sudo mkdir -p /var/www/hugo-site
-          
-          # Copy the generated static files to the web server directory
-          sudo cp -r public/* /var/www/hugo-site/
-          
-          # Set proper permissions
-          sudo chown -R www-data:www-data /var/www/hugo-site || true
-          sudo chmod -R 755 /var/www/hugo-site
-          
-          echo "Site deployed to /var/www/hugo-site"
+          git clone https://github.com/alex-shpak/hugo-book.git themes/hugo-book
+      
+      - name: Build site
+        run: hugo --minify
+        
+      - name: Deploy to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          port: ${{ secrets.SERVER_PORT }}
+          source: "public/*"
+          target: "/var/www/hugo-site"
+          strip_components: 1
