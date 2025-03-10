@@ -1,0 +1,43 @@
+name: Build and Deploy Hugo Site
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive  # Important for the hugo-book theme
+
+      - name: Setup Hugo
+        run: |
+          # Check if Hugo is installed, if not, install it
+          if ! command -v hugo &> /dev/null; then
+            echo "Installing Hugo..."
+            # For Oracle Linux
+            sudo dnf install -y hugo
+          fi
+
+      - name: Build site
+        run: |
+          echo "Building Hugo site..."
+          hugo --minify
+
+      - name: Deploy to web server directory
+        run: |
+          # Create directory if it doesn't exist
+          sudo mkdir -p /var/www/hugo-site
+          
+          # Copy the generated static files to the web server directory
+          sudo cp -r public/* /var/www/hugo-site/
+          
+          # Set proper permissions
+          sudo chown -R www-data:www-data /var/www/hugo-site || true
+          sudo chmod -R 755 /var/www/hugo-site
+          
+          echo "Site deployed to /var/www/hugo-site"
