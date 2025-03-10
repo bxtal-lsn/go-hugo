@@ -1,6 +1,7 @@
 .markdown {
   font-size: 0.9rem;  
-  
+  padding: 1rem;
+
   h1 { font-size: 1.8rem; color: #da7756 !important;}
   h2 { font-size: 1.5rem; color: #e08b6e !important;}
   h3 { font-size: 1.3rem; color: #e59f86 !important;}
@@ -22,8 +23,11 @@ body {
 
 .book-page {
   background-color: #333430;
+  border-radius: 12px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  overflow: hidden; /* This ensures content doesn't overflow the rounded corners */
 }
-
 
 .book-toc-content a {
   color:  #CECCC5;
@@ -117,4 +121,28 @@ a:hover {
 .code-block-wrapper pre {
   margin-top: 0 !important;
   margin-bottom: 0 !important;
+}
+
+.book-search input {
+  background-color: #363633 !important;
+  color: #E5E5E2 !important;
+  border: 1px solid #44443f !important;
+}
+
+.book-search {
+  background-color: #21211F !important;
+}
+
+.markdown pre code {
+  background-color: #282C34 !important;
+  color: #E5E5E2 !important;
+}
+
+.markdown code:not(pre code) {
+  background-color: #282C34 !important;
+  color: #E5E5E2 !important;
+  padding: 0.2rem 0.4rem !important;
+  border-radius: 4px !important;
+  font-family: "Roboto Mono", monospace !important;
+  font-size: 0.85em !important;
 }
