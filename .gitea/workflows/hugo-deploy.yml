@@ -14,11 +14,6 @@ jobs:
         with:
           submodules: recursive  # Important for the hugo-book theme
 
-      - name: Build site
-        run: |
-          echo "Building Hugo site..."
-          hugo --minify
-
       - name: Deploy to web server directory
         run: |
           # Create directory if it doesn't exist
