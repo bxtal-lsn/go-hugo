@@ -1,10 +1,18 @@
-# Install Gitea Backend
+# Gitea Guide
+Gitea is a lightweight, self-hosted Git service written in Go.  
+It provides a complete platform for collaborative development with features including repository management, issue tracking, pull requests, and CI/CD integration through webhooks.  
+Gitea requires minimal resources (can run on a Raspberry Pi), offers a clean web UI similar to GitHub, and supports authentication via built-in accounts, OAuth, or LDAP.  
+Installation is straightforward via binaries, Docker, or package managers.  
+Gitea is highly customizable through configuration files, supports migrations from other Git platforms, and can be extended via webhooks and the API.  
+It's ideal for teams seeking a private, efficient Git solution with lower overhead than GitLab.
+
+## Install Gitea Backend
 This supposes you use a postgresql database on the same server as your Gitea instance.
 Also, if using sqlite3, skip this step
 
 If postgresql 16 is not installed on the Oracle Linux server, run
 
-```
+```bash
 sudo dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-9-x86_64/pgdg-redhat-repo-latest.noarch.rpm
 sudo dnf -qy module disable postgresql
 sudo dnf install -y postgresql16-server
@@ -14,19 +22,18 @@ sudo systemctl start postgresql-16
 ```
 
 Switch to postgres superuser
-
-```
+```bash
 sudo su -c "psql" - postgres
 ```
 
 create gitea user. please use string password here
 
-```
+```sql
 CREATE ROLE gitea WITH LOGIN PASSWORD 'gitea';
 ```
 
 and then
-```
+```sql
 CREATE DATABASE giteadb WITH OWNER gitea TEMPLATE template0 ENCODING UTF8 LC_COLLATE 'en_US.UTF-8' LC_CTYPE 'en_US.UTF-8';
 ```
 
@@ -35,27 +42,27 @@ CREATE DATABASE giteadb WITH OWNER gitea TEMPLATE template0 ENCODING UTF8 LC_COL
 
 create datababse with utf8. Perhaps the en_US is not installed on the server. Perhaps do this first
 
-```
+```bash
 locale -a
 ```
-```
+```bash
 sudo dnf install glibc-langpack-en
 ```
-```
+```bash
 sudo localedef -i en_US -f UTF-8 en_US.UTF-8
 ```
-```
+```bash
 sudo vim /etc/locale.conf
 ```
 
 Add or modify the following line:
-```
+```bash
 LANG=en_US.UTF-8
 ```
-```
+```bash
 source /etc/locale.conf
 ```
-```
+```bash
 locale
 ```
 
@@ -66,7 +73,7 @@ Allow the database user to access the database created above by adding the follo
 `pg_hba.conf` is typicall located at `/var/lib/pgsql/16` or `/var/lib/postgresql/16/` 
 
 For local database:
-```
+```conf
 local    giteadb    gitea    scram-sha-256
 ```
 
@@ -74,26 +81,26 @@ local    giteadb    gitea    scram-sha-256
 Rules on pg_hba.conf are evaluated sequentially, that is the first matching rule will be used for authentication. Your PostgreSQL installation may come with generic authentication rules that match all users and databases. You may need to place the rules presented here above such generic rules if it is the case.
 
 restart service
-```
+```bash
 sudo systemctl restart postgresql-16
 ```
 
 On your Gitea server, test connection to the database.
-```
+```sql
 psql -U gitea -d giteadb
 ```
 
-# Install Gitea on Oracle Linux
+## Install Gitea on Oracle Linux
 
 Download the binary to a amd64 linux system
 
-```
+```bash
 wget -O gitea https://dl.gitea.com/gitea/1.23.1/gitea-1.23.1-linux-amd64
 chmod +x gitea
 ```
 
 For the next steps, git needs to be installed
-```
+```bash
 git --version
 ```
 
@@ -103,7 +110,7 @@ sudo dnf install git-all
 ```
 
 Create git user
-```
+```bash
 # On Fedora/RHEL/CentOS:
 groupadd --system git
 adduser \
@@ -118,7 +125,7 @@ adduser \
 
 create required dir structure. It is unclear with which user this should be done, but i guess you need to `sudo su` and then run the command
 
-```
+```bash
 mkdir -p /var/lib/gitea/{custom,data,log}
 chown -R git:git /var/lib/gitea/
 chmod -R 750 /var/lib/gitea/
@@ -134,19 +141,19 @@ cp gitea /usr/local/bin/gitea
 
 this sets the git user to root permissions to write to app.ini file, this should be changed after the web ui installation.
 
-```
+```bash
 chmod 750 /etc/gitea
 chmod 640 /etc/gitea/app.ini
 ```
 
-# Run Gitea on Linux as a Service
+## Run Gitea on Linux as a Service
 
 copy this snippet into
-```
+```bash
 sudo vim /etc/systemd/system/gitea.service
 ```
 
-```
+```conf
 [Unit]
 Description=Gitea (Git with a cup of tea)
 After=network.target
@@ -235,12 +242,12 @@ WantedBy=multi-user.target
 ```
 
 enable and start the service
-```
+```bash
 sudo systemctl enable gitea --now
 ```
 
 
-# Remove a Gitea and postgresql-16 Instance
+## Remove a Gitea and postgresql-16 Instance
 
 1. Stop and Disable Services
 
@@ -310,7 +317,7 @@ systemctl status postgresql-16
 ```
 
 
-# Linux history example
+## Linux history example
 
 
 sudo dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-9-x86_64/pgdg-redhat-repo-latest.noarch.rpm  

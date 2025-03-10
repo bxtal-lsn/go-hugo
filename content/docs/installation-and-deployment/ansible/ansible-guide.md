@@ -1,3 +1,10 @@
+# Ansible Guide
+Ansible is an open-source automation tool that simplifies configuration management, application deployment, and task automation.  
+It uses YAML-based playbooks to define automation tasks and SSH for agent-less communication with managed nodes.  
+Ansible follows a declarative, idempotent approach where you specify the desired state rather than step-by-step procedures.  
+It uses a push-based architecture, supports inventory management for organizing hosts, provides reusable roles, and includes extensive modules for various operations.  
+Ansible is particularly valued for its simplicity, requiring minimal prerequisites on target systems while offering powerful orchestration capabilities.
+
 ## Installation
 See installation operions on [ansible installation](https://docs.ansible.com/ansible/latest/installation_guide/index.html)
 

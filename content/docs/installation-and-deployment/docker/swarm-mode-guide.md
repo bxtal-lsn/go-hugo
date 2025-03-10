@@ -1,4 +1,5 @@
-# Initialization
+# Docker Swarm Guide
+## Initialization
 
 initialze docker swarm on main manager node
 ```bash
@@ -30,7 +31,7 @@ see info about the docker instances
 ```bash
 docker info
 ```
-# deploy docker containers
+## deploy docker containers
 
 create a swarm service
 ```bash
@@ -119,7 +120,7 @@ remove a service with
 docker service rm <service-name>
 ```
 
-# Stack Deploy (docker compose), secrets management, and secrets injection
+## Stack Deploy (docker compose), secrets management, and secrets injection
 
 Here is gitea used as example with postgresql as backend
 
@@ -211,7 +212,7 @@ cat /run/secrets/<secret-name>
 ```
 
 stop stack with
-```
+```bash
 docker stack rm gitea-stack
 ```
 
@@ -237,25 +238,24 @@ docker secret rm GITEA_DB_PASSWD
 ```
 
 inspect sercets with
-```
+```bash
 docker secret ls
 docker secret inspect <secret_name>
 ```
 
 remove secrets with
-```
+```bash
 docker secret rm <secret_name>
 ```
 
 verify stack is removed
-```
+```bash
 docker stack ls
 docker service ls
 ```
 
 
 increase replicas
-```
+```bash
 docker service scale gitea-stack_gitea=3
 ```
-

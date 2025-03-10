@@ -1,4 +1,9 @@
-# Installation and configuration of Harbor
+# Harbor Guide
+Harbor is an open-source container registry platform that securely stores, signs, and scans container images.  
+It extends Docker Registry with additional security and management features including vulnerability scanning, image signing, RBAC, identity integration (LDAP/AD/OIDC), policy-based image replication, and project-level resource isolation.  
+Harbor supports multi-tenancy through projects, integrates with CI/CD pipelines, and offers a clean web UI for registry management.  
+Written in Go, it can be deployed via Helm charts or as container images, with high availability configurations available.  
+Harbor is CNCF graduated and particularly valuable in regulated environments requiring compliance with security policies for container deployments.
 
 ## Prerequisites
 Docker Engine	Version 20.10.10-ce+ or higher	

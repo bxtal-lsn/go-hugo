@@ -13,7 +13,7 @@ docker run -d --name registry --mount src=registry,dst=/var/lib/registry -p 5000
 ```
 
 Or run in swarm mode as a service
-```
+```bash
 docker service create \
   --name registry \
   --mount type=volume,src=registry,dst=/var/lib/registry \
@@ -22,7 +22,7 @@ docker service create \
 ```
 
 test the registry with nginx
-```
+```bash
 docker pull nginx:latest
 ```
 
@@ -37,14 +37,14 @@ docker images
 ```
 
 push the image to the local registry
-```
+```bash
 docker push localhost:5000/nginx:latest
 ```
 
 delete all nginx images locally
 
 pull the docker image from the registry
-```
+```bash
 docker pull localhost:5000/nginx
 ```
 
