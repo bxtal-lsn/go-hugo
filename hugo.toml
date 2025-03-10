@@ -1,12 +1,9 @@
 baseURL = "http://localhost:1313"
 languageCode = "en-us"
-
-[markup.goldmark.renderer]
-  unsafe = true  # Allows HTML in markdown
+theme = "hugo-book"  # This line is crucial
 
 [params]
   BookTheme = "auto"
-  BookMenuBundle = '/menu'
   BookSection = 'docs'
   BookLogo = "sev.svg"
   BookFavicon = "sev.svg"

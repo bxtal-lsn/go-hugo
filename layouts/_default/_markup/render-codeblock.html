@@ -1,0 +1,7 @@
+<div class="code-block-wrapper">
+  {{ if ne .Type "" }}
+    <div class="code-label">{{ .Type }}</div>
+  {{ end }}
+  {{ $result := transform.HighlightCodeBlock . }}
+  {{ $result.Wrapped }}
+</div>

@@ -1,0 +1,119 @@
+.markdown {
+  font-size: 0.9rem;  
+  
+  h1 { font-size: 1.8rem; color: #da7756 !important;}
+  h2 { font-size: 1.5rem; color: #e08b6e !important;}
+  h3 { font-size: 1.3rem; color: #e59f86 !important;}
+  h4 { font-size: 1.1rem; color: #ebb39e !important;}
+}
+
+body {
+    background-color: #262725 ;
+    color: #E5E5E2
+}
+
+.book-menu-content {
+  background-color: #21211F !important;
+}
+
+.book-menu a.active {
+    color: #da7756 !important;
+}
+
+.book-page {
+  background-color: #333430;
+}
+
+
+.book-toc-content a {
+  color:  #CECCC5;
+
+}
+
+a:hover {
+    color: #a34e31 !important;
+}
+
+.book-btn {
+    background-color: #bd5d3a !important;
+    border-color: #bd5d3a !important;
+    color: white !important;
+}
+
+
+.code-block-wrapper {
+  position: relative;
+  margin: 0rem 0;
+}
+
+.code-block-wrapper pre {
+  background-color: #282C34 !important;
+  border-radius: 6px !important; 
+  margin-bottom: 0rem !important;
+  overflow: hidden;
+  overflow-x: auto !important; 
+  white-space: pre !important;
+  word-wrap: normal !important;
+  &::-webkit-scrollbar {
+    height: 8px; 
+    background-color: #2d2d2d;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background-color: #535352;
+    border-radius: 4px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background-color: #2d2d2d;
+    border-radius: 4px;
+  }
+  
+  /* Firefox */
+  scrollbar-color: #535352 #2d2d2d;
+  scrollbar-width: thin;
+}
+
+.code-block-wrapper pre,
+.code-block-wrapper pre code,
+.code-block-wrapper .chroma,
+.code-block-wrapper .chroma code,
+.code-block-wrapper .highlight,
+.code-block-wrapper .highlight pre,
+.code-block-wrapper table,
+.code-block-wrapper table td,
+.code-block-wrapper table tr,
+.code-block-wrapper table pre {
+  background-color: #282C34 !important;
+  border: none !important;
+}
+
+.code-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.6rem;
+  background-color: #282C34;
+  color: #da7756;
+  border-top-right-radius: 6px;
+  z-index: 1;
+}
+
+.code-block-wrapper + .code-block-wrapper {
+  margin-top: 2rem !important;
+}
+
+.code-block-wrapper {
+  position: relative;
+  margin: 1rem 0;
+}
+
+.code-block-wrapper:last-child {
+  margin-bottom: 0 !important;
+}
+
+.code-block-wrapper pre {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
