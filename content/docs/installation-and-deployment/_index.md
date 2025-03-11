@@ -1,6 +1,6 @@
 ---
 title: "Installation & Deployment"
-weight: 10
+weight: 20
 bookCollapseSection: true
 ---
 
